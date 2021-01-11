@@ -6,6 +6,7 @@ import { BulletItem, Button, Header, Text, Screen, Wallpaper } from "../../compo
 import { color, spacing } from "../../theme"
 import { Api } from "../../services/api"
 import { save } from "../../utils/storage"
+import { NoteStore } from "../../models"
 export const logoIgnite = require("./logo-ignite.png")
 export const heart = require("./heart.png")
 
@@ -83,7 +84,8 @@ export const DemoScreen = observer(function DemoScreen() {
 
   const demoReactotron = React.useMemo(
     () => async () => {
-      console.tron.log("Your Friendly tron log message")
+      const { noteStore } = NoteStore
+      console.tron.log(noteStore)
       console.tron.logImportant("I am important")
       console.tron.display({
         name: "DISPLAY",

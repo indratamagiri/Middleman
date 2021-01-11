@@ -24,7 +24,7 @@ const RIGHT: ViewStyle = { width: 32 }
 /**
  * Header that appears on many screens. Will hold navigation buttons and screen title.
  */
-export function Header(props: HeaderProps) {
+export function Header (props: HeaderProps) {
   const {
     onLeftPress,
     onRightPress,

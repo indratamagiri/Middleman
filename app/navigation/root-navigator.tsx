@@ -8,7 +8,9 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { PrimaryNavigator } from "./primary-navigator"
+import { BottomMainNavigation } from './bottom-navigation'
+import { PrimaryNavigator } from './primary-navigator'
+import { RootParamList } from "./type-navigation"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -20,10 +22,6 @@ import { PrimaryNavigator } from "./primary-navigator"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type RootParamList = {
-  primaryStack: undefined
-}
-
 const Stack = createNativeStackNavigator<RootParamList>()
 
 const RootStack = () => {
@@ -32,12 +30,18 @@ const RootStack = () => {
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
-
-        stackPresentation: "modal",
       }}
+      initialRouteName={'bottomStack'}
     >
       <Stack.Screen
-        name="primaryStack"
+        name="bottomStack"
+        component={BottomMainNavigation}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="primaryNavigator"
         component={PrimaryNavigator}
         options={{
           headerShown: false,

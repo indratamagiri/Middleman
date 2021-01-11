@@ -38,6 +38,7 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 function App() {
   const navigationRef = useRef<NavigationContainerRef>()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+  const initialScreen = !__DEV__
 
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
@@ -65,7 +66,7 @@ function App() {
       <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
         <RootNavigator
           ref={navigationRef}
-          initialState={initialNavigationState}
+          initialState={initialScreen ? null : initialNavigationState}
           onStateChange={onNavigationStateChange}
         />
       </SafeAreaProvider>
