@@ -5,7 +5,9 @@ export type RootParamList = {
 
 export type PrimaryParamList = {
     welcome: undefined
-    demo: undefined
+    demo: undefined,
+    login: undefined,
+    register: undefined
   }
 
 export type BottomParamList = {

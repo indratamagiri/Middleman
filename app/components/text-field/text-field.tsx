@@ -14,7 +14,7 @@ const CONTAINER: ViewStyle = {
 // the base styling for the TextInput
 const INPUT: TextStyle = {
   fontFamily: typography.primary,
-  color: color.text,
+  color: color.palette.black,
   minHeight: 44,
   fontSize: 18,
   backgroundColor: color.palette.white,
@@ -23,6 +23,10 @@ const INPUT: TextStyle = {
 // currently we have no presets, but that changes quickly when you build your app.
 const PRESETS: { [name: string]: ViewStyle } = {
   default: {},
+}
+
+const TEXTHEADE: TextStyle = {
+  color: '#228294'
 }
 
 const enhance = (style, styleOverride) => {
@@ -53,11 +57,11 @@ export function TextField(props: TextFieldProps) {
 
   return (
     <View style={containerStyle}>
-      <Text preset="fieldLabel" tx={labelTx} text={label} />
+      <Text style={TEXTHEADE} preset="fieldLabel" tx={labelTx} text={label} />
       <TextInput
         placeholder={actualPlaceholder}
         placeholderTextColor={color.palette.lighterGrey}
-        underlineColorAndroid={color.transparent}
+        underlineColorAndroid={color.palette.black}
         {...rest}
         style={inputStyle}
         ref={forwardedRef}

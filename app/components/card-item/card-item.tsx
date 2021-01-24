@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TextStyle, View, ViewStyle, Dimensions } from "react-native"
+import { TextStyle, View, ViewStyle, Dimensions, Image, ImageStyle, ImageSourcePropType } from "react-native"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { color, spacing, typography } from "../../theme"
 import { Text } from "../"
@@ -53,36 +53,41 @@ const TEXT_BOTTOM: TextStyle = {
   marginHorizontal: spacing[3]
 }
 
+const IMG: ImageStyle = {
+  width: 50,
+  height: 50
+}
+
 export interface CardItemProps {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: ViewStyle
   title: string,
-  Icon: React.FC,
-  TextBottom
+  TextBottom,
+  imageSource: ImageSourcePropType
 }
 
 /**
  * Describe your component here
  */
 export const CardItem = (props: CardItemProps) => {
-  const { style, title, Icon, TextBottom } = props
+  const { style, title, imageSource, TextBottom } = props
   const [radio, setRadio] = React.useState(false)
 
   return (
-    <View style={[CONTAINER, style]}>
+    <View style={[CONTAINER, style]} key={title}>
       <View style={BASE}>
         <View style={BASE_ITEM}>
           <Text style={TEXT_TITLE}>{title}</Text>
           <View style={ITEM_GROUP}>
             <RadioButton active={radio}
-            onPress={() => setRadio(!radio)}
+              onPress={() => setRadio(!radio)}
             />
           </View>
         </View>
         <View style={BASE_ICON}>
-          <Icon />
+          <Image style={IMG} source={imageSource}/>
           <Entypo name={'plus'} size={40}></Entypo>
         </View>
       </View>

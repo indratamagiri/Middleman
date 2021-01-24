@@ -7,7 +7,7 @@
 import React from "react"
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { WelcomeScreen, DemoScreen } from "../screens"
+import { WelcomeScreen, DemoScreen, LoginScreen, RegisterScreen } from "../screens"
 import { PrimaryParamList } from "./type-navigation"
 
 /**
@@ -33,10 +33,15 @@ export function PrimaryNavigator() {
         headerShown: false,
         gestureEnabled: true,
       }}
-      initialRouteName={'welcome'}
+      initialRouteName={'login'}
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
+      <Stack.Screen
+        name="login"
+        component={LoginScreen}
+        options={{ headerShown: false }}/>
+      <Stack.Screen name="register" component={RegisterScreen} />
     </Stack.Navigator>
   )
 }

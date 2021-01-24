@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "react-native-screens/native-stack"
 import { BottomMainNavigation } from './bottom-navigation'
 import { PrimaryNavigator } from './primary-navigator'
 import { RootParamList } from "./type-navigation"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -25,13 +26,14 @@ import { RootParamList } from "./type-navigation"
 const Stack = createNativeStackNavigator<RootParamList>()
 
 const RootStack = () => {
+  const { profile } = useStores()
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
       }}
-      initialRouteName={'bottomStack'}
+      initialRouteName={ profile ? 'bottomStack' : 'primaryNavigator'}
     >
       <Stack.Screen
         name="bottomStack"

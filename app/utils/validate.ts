@@ -1,4 +1,6 @@
 import { contains } from "ramda"
+
+import { CommonActions } from '@react-navigation/native'
 const ValidateJS = require("validate.js")
 
 // HACK(steve): wierd typescript situation because of strange typings
@@ -75,4 +77,21 @@ export function validate(rules: ValidationRules, data: {}): ValidationErrors {
     return {} as ValidationErrors
   }
   return Validate(data, rules, { fullMessages: false }) || {}
+}
+
+export function validateEmail(email: string) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
+}
+
+export default function resetNavigation(navigation: any, routeName: string, params?: any) {
+  navigation.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [
+        { name: routeName },
+        params
+      ],
+    })
+  )
 }

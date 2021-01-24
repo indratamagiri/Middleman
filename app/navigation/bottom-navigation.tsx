@@ -13,7 +13,7 @@ const Tab = createMaterialBottomTabNavigator<BottomParamList>()
 export function BottomMainNavigation() {
   return (
     <Tab.Navigator
-      activeColor={color.palette.deepskyblue}
+      activeColor={'#13C4B4'}
       inactiveColor={color.dim}
       shifting={false}
       barStyle={{ backgroundColor: color.background }}
