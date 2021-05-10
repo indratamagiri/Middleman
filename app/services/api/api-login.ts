@@ -10,15 +10,16 @@ export type GetResultLogin = {
         code : number,
         status : string,
         data : {
-            message : string
+            message : string,
+            token: string
         }
-    } } | GeneralApiProblem
+    }}
 
 export const LoginApi = async ({ 
     email,
     password
 } : LoginType):
-Promise<GetResultLogin> => {
+Promise<GetResultLogin | GeneralApiProblem> => {
   const api = new Api();
   api.setup();
   const response: ApiResponse<any> = await api.apisauce.post(`${DEFAULT_API_CONFIG.url}/api/login`,
@@ -50,14 +51,14 @@ export type GetRegister = {
         data : {
             message : string
         }
-    } } | GeneralApiProblem
+    } }
 
 export const RegisterApi = async ({ 
     email,
     password,
     name
 } : RegisterType):
-Promise<GetRegister> => {
+Promise<GetRegister | GeneralApiProblem> => {
   const api = new Api();
   api.setup();
   const response: ApiResponse<any> = await api.apisauce.post(`${DEFAULT_API_CONFIG.url}/api/register`,

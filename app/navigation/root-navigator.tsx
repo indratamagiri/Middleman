@@ -4,14 +4,14 @@
  * and a "main" flow (which is contained in your PrimaryNavigator) which the user
  * will use once logged in.
  */
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
-
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
 import { BottomMainNavigation } from './bottom-navigation'
 import { PrimaryNavigator } from './primary-navigator'
 import { RootParamList } from "./type-navigation"
-import { useStores } from "../models"
+import { loadString } from "../utils/storage"
+import { View } from "react-native"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,14 +26,28 @@ import { useStores } from "../models"
 const Stack = createNativeStackNavigator<RootParamList>()
 
 const RootStack = () => {
-  const { profile } = useStores()
+
+  const [token, setToken] = useState<string>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadString('token').then((payload) => {
+      setToken(payload)
+      setLoading(false)
+    })
+  }, [])
+
+  if(loading){
+    return(<View></View>)
+  }
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
       }}
-      initialRouteName={ profile ? 'bottomStack' : 'primaryNavigator'}
+      initialRouteName={token ? 'bottomStack' : 'primaryNavigator'}
     >
       <Stack.Screen
         name="bottomStack"

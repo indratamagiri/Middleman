@@ -14,7 +14,7 @@ import {
 import { Button, Text, TextField } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import LinearGradient from "react-native-linear-gradient"
-import { useStores } from "../../models"
+import { UserModelStore, useStores } from "../../models"
 import { color } from "../../theme"
 import { validateEmail } from "../../utils/validate"
 
@@ -68,7 +68,7 @@ const BUTTONTEXT: TextStyle = {
 }
 
 export const RegisterScreen = observer(function RegisterScreen() {
-  const { checkUser, register, users } = useStores()
+  const { Register } = UserModelStore
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfrim, setPasswordConfrim] = useState('')
@@ -82,20 +82,11 @@ export const RegisterScreen = observer(function RegisterScreen() {
       ToastAndroid.show("password is wrong!", ToastAndroid.SHORT)
     } else if (password !== passwordConfrim) {
       ToastAndroid.show("password not match!", ToastAndroid.SHORT)
-    } else if (!checkUser({ email, password })) {
-      register({
-        username: email,
-        email,
-        password,
-        address: '',
-        telp: '',
-        accountNumber: ''
-      })
-      ToastAndroid.show("account successfully created!", ToastAndroid.SHORT)
     } else {
-      ToastAndroid.show("accounts have been created!", ToastAndroid.SHORT)
+      Register({email, password, name: email})
     }
   }
+
   return (
     <ScrollView style={ROOT}>
       <LinearGradient colors={['#13C4B4', '#228294']} style={CONTAINER}>

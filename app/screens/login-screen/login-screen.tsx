@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Image, ImageStyle, ViewStyle, Dimensions, View, TextStyle, ScrollView, TouchableOpacity, ToastAndroid } from "react-native"
+import { Image, ImageStyle, ViewStyle, Dimensions, View, TextStyle, ScrollView, TouchableOpacity } from "react-native"
 import { Button, Text, TextField } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
+import { UserModelStore } from "../../models"
 import { color } from "../../theme"
 import LinearGradient from "react-native-linear-gradient"
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const windowWidth = Dimensions.get('window').width
 const ROOT: ViewStyle = {
@@ -58,23 +59,27 @@ const BUTTONTEXT: TextStyle = {
 }
 
 export const LoginScreen = observer(function LoginScreen() {
-  const { checkUser, profileLogin } = useStores()
+  const { Login, fetchingLogin } = UserModelStore
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   // Pull in navigation via hook
   const navigation = useNavigation()
-  const OnPressLogin = () => {
-    if (checkUser({ email, password })) {
-      profileLogin({ email, password })
-      navigation.navigate('bottomStack')
-    } else {
-      ToastAndroid.show("Email and password incorrect!", ToastAndroid.SHORT)
-    }
+  const OnPressLogin = async () => {
+     Login({email: email, password: password}).then((payload) => {
+       if(payload.kind === 'ok') {
+        navigation.navigate('bottomStack')
+       }
+     })
   }
 
   return (
     <ScrollView style={ROOT}>
+        <Spinner
+          visible={fetchingLogin === "pending"}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF'}}
+        />
       <LinearGradient colors={['#13C4B4', '#228294']} style={CONTAINER}>
         <Image style={IMG} source={require('../../../assets/image/MiddleMan.png')} ></Image>
       </LinearGradient>

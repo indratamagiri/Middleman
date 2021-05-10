@@ -1,7 +1,7 @@
 // Use this import if you want to use "env.js" file
 // const { API_URL } = require("../../config/env")
 // Or just specify it directly like this:
-import { API_URL, API_DEV } from 'react-native-dotenv'
+import { API_URL, API_DEV } from '../../../env'
 
 /**
  * The options used to configure the API.
