@@ -63,10 +63,13 @@ export async function save(key: string, value: any): Promise<boolean> {
  *
  * @param key The key to kill.
  */
-export async function remove(key: string): Promise<void> {
+export async function remove(key: string): Promise<boolean> {
   try {
     await AsyncStorage.removeItem(key)
-  } catch {}
+    return true
+  } catch {
+    return false
+  }
 }
 
 /**
@@ -75,5 +78,5 @@ export async function remove(key: string): Promise<void> {
 export async function clear(): Promise<void> {
   try {
     await AsyncStorage.clear()
-  } catch {}
+  } catch { }
 }

@@ -66,20 +66,20 @@ export const LoginScreen = observer(function LoginScreen() {
   // Pull in navigation via hook
   const navigation = useNavigation()
   const OnPressLogin = async () => {
-     Login({email: email, password: password}).then((payload) => {
-       if(payload.kind === 'ok') {
+    Login({ email: email, password: password }).then((payload) => {
+      if (payload.kind === 'ok') {
         navigation.navigate('bottomStack')
-       }
-     })
+      }
+    })
   }
 
   return (
     <ScrollView style={ROOT}>
-        <Spinner
-          visible={fetchingLogin === "pending"}
-          textContent={'Loading...'}
-          textStyle={{ color: '#FFF'}}
-        />
+      <Spinner
+        visible={fetchingLogin === "pending"}
+        textContent={'Loading...'}
+        textStyle={{ color: '#FFF' }}
+      />
       <LinearGradient colors={['#13C4B4', '#228294']} style={CONTAINER}>
         <Image style={IMG} source={require('../../../assets/image/MiddleMan.png')} ></Image>
       </LinearGradient>
@@ -96,6 +96,7 @@ export const LoginScreen = observer(function LoginScreen() {
           label={'Password'}
           style={STYLEPASS}
           value={password}
+          password={true}
           onChangeText={(x) => setPassword(x)}></TextField>
       </View>
       <View style={{ alignItems: 'center', bottom: 65, }}>

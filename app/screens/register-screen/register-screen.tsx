@@ -14,7 +14,7 @@ import {
 import { Button, Text, TextField } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import LinearGradient from "react-native-linear-gradient"
-import { UserModelStore, useStores } from "../../models"
+import { UserModelStore } from "../../models"
 import { color } from "../../theme"
 import { validateEmail } from "../../utils/validate"
 
@@ -70,8 +70,8 @@ const BUTTONTEXT: TextStyle = {
 export const RegisterScreen = observer(function RegisterScreen() {
   const { Register } = UserModelStore
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [passwordConfrim, setPasswordConfrim] = useState('')
 
   // Pull in navigation via hook
   const navigation = useNavigation()
@@ -80,10 +80,14 @@ export const RegisterScreen = observer(function RegisterScreen() {
       ToastAndroid.show("Email is wrong!", ToastAndroid.SHORT)
     } else if (!password) {
       ToastAndroid.show("password is wrong!", ToastAndroid.SHORT)
-    } else if (password !== passwordConfrim) {
-      ToastAndroid.show("password not match!", ToastAndroid.SHORT)
+    } else if (!username) {
+      ToastAndroid.show("Username is wrong!", ToastAndroid.SHORT)
     } else {
-      Register({email, password, name: email})
+      Register({ email, password, username }).then((payload) => {
+        if (payload.kind === 'ok') {
+          navigation.goBack()
+        }
+      })
     }
   }
 
@@ -96,17 +100,16 @@ export const RegisterScreen = observer(function RegisterScreen() {
         <Text style={LOGIN_TEXT}>Register</Text>
         <TextField
           onChangeText={(x) => setEmail(x)}
-          label={'Email'} keyboardType={'email-address'} style={STYLEINPUT}></TextField>
+          label={'Email'} keyboardType={'email-address'} style={STYLEPASS}></TextField>
+        <TextField
+          onChangeText={(x) => setUsername(x)}
+          label={'Username'} style={STYLEPASS}></TextField>
         <TextField
           onChangeText={(x) => setPassword(x)}
           secureTextEntry={true}
           label={'Password'}
-          style={STYLEPASS}></TextField>
-        <TextField
-          onChangeText={(x) => setPasswordConfrim(x)}
-          secureTextEntry={true}
-          label={'Confrim Password'}
-          style={[STYLEPASS, { marginBottom: 60 }]}></TextField>
+          password={true}
+          style={[STYLEPASS, { marginBottom: 40 }]}></TextField>
       </View>
       <View style={{ alignItems: 'center', bottom: 65, }}>
         <Button

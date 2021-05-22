@@ -40,7 +40,7 @@ export function PrimaryNavigator() {
       <Stack.Screen
         name="login"
         component={LoginScreen}
-        options={{ headerShown: false }}/>
+        options={{ headerShown: false }} />
       <Stack.Screen name="register" component={RegisterScreen} />
     </Stack.Navigator>
   )

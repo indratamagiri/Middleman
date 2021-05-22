@@ -12,6 +12,7 @@ import { PrimaryNavigator } from './primary-navigator'
 import { RootParamList } from "./type-navigation"
 import { loadString } from "../utils/storage"
 import { View } from "react-native"
+import { ChangePassword, EditProfile, AddItem } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -37,15 +38,15 @@ const RootStack = () => {
     })
   }, [])
 
-  if(loading){
-    return(<View></View>)
+  if (loading) {
+    return (<View></View>)
   }
 
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
         gestureEnabled: true,
+        headerShown: false,
       }}
       initialRouteName={token ? 'bottomStack' : 'primaryNavigator'}
     >
@@ -63,6 +64,9 @@ const RootStack = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="changePassword" component={ChangePassword} />
+      <Stack.Screen name="editProfile" component={EditProfile} />
+      <Stack.Screen name="addItem" component={AddItem} />
     </Stack.Navigator>
   )
 }

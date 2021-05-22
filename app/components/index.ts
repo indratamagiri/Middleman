@@ -11,3 +11,4 @@ export * from "./text-field/text-field"
 export * from "./wallpaper/wallpaper"
 export * from "./card-item/card-item"
 export * from "./radio-button/radio-button"
+export * from './fetching/fetching'

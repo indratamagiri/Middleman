@@ -1,6 +1,5 @@
+import { CommonActions } from "@react-navigation/routers"
 import { contains } from "ramda"
-
-import { CommonActions } from '@react-navigation/native'
 const ValidateJS = require("validate.js")
 
 // HACK(steve): wierd typescript situation because of strange typings
@@ -84,7 +83,7 @@ export function validateEmail(email: string) {
   return re.test(String(email).toLowerCase())
 }
 
-export default function resetNavigation(navigation: any, routeName: string, params?: any) {
+export function resetNavigation(navigation: any, routeName: string, params?: any) {
   navigation.dispatch(
     CommonActions.reset({
       index: 0,

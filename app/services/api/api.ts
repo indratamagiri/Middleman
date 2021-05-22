@@ -43,7 +43,7 @@ export class Api {
     })
   }
 
- async Authorization() {
+  async Authorization() {
     const token = await loadString('token')
     this.apisauce = create({
       baseURL: this.config.url,
@@ -53,5 +53,5 @@ export class Api {
         Authorization: `Bearer ${token}`
       },
     })
-}
+  }
 }

@@ -36,5 +36,7 @@ export interface TextFieldProps extends TextInputProps {
    */
   preset?: "default"
 
-  forwardedRef?: any
+  forwardedRef?: any,
+
+  password?: boolean
 }

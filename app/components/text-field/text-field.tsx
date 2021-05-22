@@ -1,5 +1,6 @@
-import React from "react"
-import { View, TextInput, TextStyle, ViewStyle } from "react-native"
+import React, { useState } from "react"
+import { View, TextInput, TextStyle, ViewStyle, TouchableOpacity } from "react-native"
+import Feather from 'react-native-vector-icons/Feather'
 import { color, spacing, typography } from "../../theme"
 import { translate } from "../../i18n"
 import { Text } from "../text/text"
@@ -18,6 +19,7 @@ const INPUT: TextStyle = {
   minHeight: 44,
   fontSize: 18,
   backgroundColor: color.palette.white,
+  flex: 1
 }
 
 // currently we have no presets, but that changes quickly when you build your app.
@@ -46,6 +48,7 @@ export function TextField(props: TextFieldProps) {
     style: styleOverride,
     inputStyle: inputStyleOverride,
     forwardedRef,
+    password,
     ...rest
   } = props
   let containerStyle: ViewStyle = { ...CONTAINER, ...PRESETS[preset] }
@@ -55,17 +58,27 @@ export function TextField(props: TextFieldProps) {
   inputStyle = enhance(inputStyle, inputStyleOverride)
   const actualPlaceholder = placeholderTx ? translate(placeholderTx) : placeholder
 
+  const [secureText, setSecureText] = useState(password)
   return (
     <View style={containerStyle}>
       <Text style={TEXTHEADE} preset="fieldLabel" tx={labelTx} text={label} />
-      <TextInput
-        placeholder={actualPlaceholder}
-        placeholderTextColor={color.palette.lighterGrey}
-        underlineColorAndroid={color.palette.black}
-        {...rest}
-        style={inputStyle}
-        ref={forwardedRef}
-      />
+      <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 0.5 }}>
+        <TextInput
+          placeholder={actualPlaceholder}
+          {...rest}
+          style={inputStyle}
+          ref={forwardedRef}
+          secureTextEntry={secureText}
+        />
+
+        {password ? (
+          <TouchableOpacity onPress={() => {
+            setSecureText(!secureText)
+          }}>
+            <Feather name={secureText ? 'eye-off' : 'eye'} size={20}></Feather>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   )
 }

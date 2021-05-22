@@ -6,3 +6,6 @@ export * from './profile-screen/profile-screen'
 export * from "./circle-screen/circle-screen"
 export * from "./login-screen/login-screen"
 export * from "./register-screen/register-screen"
+export * from "./change-password-screen/change-password-screen"
+export * from "./profile-screen/edit-profile"
+export * from "./add-item/add-item"

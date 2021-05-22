@@ -1,145 +1,102 @@
-import React from "react"
-import { Image, ImageStyle, TextStyle, View, ViewStyle, } from "react-native"
+import React, { useEffect } from "react"
+import { Image, StyleSheet, ScrollView, View, ViewStyle, TouchableOpacity, } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
-import { Text } from "../../components"
-import { color } from "../../theme"
-import { useStores } from "../../models"
+import { Fetching, Text } from "../../components"
 import { observer } from "mobx-react-lite"
-import resetNavigation from "../../utils/validate"
+import { ProfileModelStore, UserModelStore } from "../../models"
+import { color } from "../../theme"
+import ListItem from './list-item'
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
-  height: 120,
+  height: 200,
   width: '100%',
-  flexDirection: 'row',
+  flexDirection: "row",
   padding: 16,
-}
-const TEXT_PROFILE: TextStyle = {
-  fontWeight: '700',
-  fontSize: 18,
-  textAlign: 'center',
-  marginTop: 12
-}
-const PROFILE: ViewStyle = {
-  alignItems: 'center'
-}
-const IMG: ImageStyle = {
-  marginTop: 30,
-  width: 75,
-  height: 75,
-  borderRadius: 50,
-}
-const TEXT_NAME: TextStyle = {
-  fontWeight: '400',
-  fontSize: 22,
-  textAlign: 'center',
-  marginTop: 4
-}
-const TEXT_TAG: TextStyle = {
-  fontWeight: '400',
-  fontSize: 14,
-  textAlign: 'center',
-  marginTop: 4
-}
-const TEXT_TITLE: TextStyle = {
-  fontFamily: 'Roboto-Light',
-  fontSize: 22,
-  textAlign: 'center',
-  marginTop: 4
-}
-const LINE: ViewStyle = {
-  borderBottomWidth: 1,
-  borderColor: color.palette.lighterGrey,
-  width: '70%',
-  marginTop: 16
-}
-const BIO: ViewStyle = {
-  borderWidth: 1,
-  borderColor: color.palette.lighterGrey,
-  flex: 1,
-  marginTop: 70,
-  margin: 16,
-  backgroundColor: color.palette.white
-}
-const TOP_BIO: ViewStyle = {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginTop: 10,
-  marginHorizontal: 4
-}
-const CONTAINER_CARD: ViewStyle = {
-  backgroundColor: '#1E959E',
-  borderRadius: 20,
-  width: 120
-}
-const TEXT_CARD: TextStyle = {
-  marginVertical: 6,
-  textAlign: 'center',
-  color: color.palette.white,
-  fontWeight: '700'
-}
-const TEXT_INFO: TextStyle = {
-  fontSize: 16,
-  marginTop: 12,
-  paddingBottom: 8,
-  borderBottomColor: '#19ACA9',
-  borderBottomWidth: 1,
-}
-const LOGOUT: ViewStyle = {
-  backgroundColor: '#1E959E',
-  borderRadius: 20,
-  width: 120,
-  alignSelf: 'center',
-  marginTop: 60,
-  marginBottom: 30
 }
 
 export const ProfileScreen = observer(() => {
   const navigation = useNavigation()
-  const { logout } = useStores()
+  const { Logout } = UserModelStore
+  const { GetDataProfile, fetchingProfile, name, email, avatar } = ProfileModelStore
+
+  useEffect(() => {
+    GetDataProfile()
+  }, [])
 
   return (
-    <View style={FULL}>
-      <ScrollView>
-        <LinearGradient colors={['#13C4B4', '#228294']} style={CONTAINER}>
-        </LinearGradient>
+    <Fetching condition={fetchingProfile === 'pending'}>
+      <View style={FULL}>
+        <ScrollView style={{ flex: 1 }}>
+          <LinearGradient colors={['#13C4B4', '#228294']} style={CONTAINER}>
+            <Text style={styles.textProfile}>Profile</Text>
+          </LinearGradient>
+          <View style={styles.viewBottom}>
+            <View style={{ elevation: 5, bottom: 50, backgroundColor: color.background }}>
+              <Image style={styles.image} source={{ uri: avatar || 'https://qubisastorage.blob.core.windows.net/files/images/ic-profile-pic.png' }}></Image>
 
-        <View style={PROFILE}>
-          <Text style={TEXT_PROFILE}>My Profile</Text>
-          <Image style={IMG} source={require('../../../assets/image/profile.png')}></Image>
-          <Text style={TEXT_NAME}>Joey Leong</Text>
-          <Text style={TEXT_TAG}>@jleong</Text>
-          <Text style={TEXT_TITLE}>Serdadu Circle</Text>
-          <View style={LINE}></View>
-        </View>
+              <Text style={styles.textName}>{name || ''}</Text>
+              <Text style={styles.textEmail}>{email || ''}</Text>
 
-        <View style={BIO}>
-          <View style={TOP_BIO}>
-            <View>
-              <View style={CONTAINER_CARD}>
-                <Text style={TEXT_CARD}>Bio</Text>
-              </View>
-              <Text style={TEXT_INFO}>Jl KH Syahdan</Text>
-              <Text style={TEXT_INFO}>081122334455</Text>
-              <Text style={TEXT_INFO}>JordanS@wBnius.ediu</Text>
-            </View>
-            <View>
-              <View style={CONTAINER_CARD}>
-                <Text style={TEXT_CARD}>History</Text>
-              </View>
-              <Text style={TEXT_INFO}>Purchase List</Text>
+              <ListItem title={"Tambah Profile"} navigation={() => {
+                navigation.navigate('editProfile')
+              }}></ListItem>
+              <ListItem title={"Change Password"} navigation={() => {
+                navigation.navigate('changePassword')
+              }}></ListItem>
+
+              <TouchableOpacity
+                style={styles.logout}
+                onPress={() => {
+                  Logout().then((payload) => {
+                    if (payload) {
+                      navigation.reset({
+                        routes: [{ name: 'primaryNavigator' }]
+                      });
+                    }
+                  })
+                }}>
+                <Text style={{ color: color.error }}>Logout</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity onPress={() => {
-            resetNavigation(navigation, 'login')
-            logout()
-          }} style={LOGOUT}>
-            <Text style={TEXT_CARD}>LOGOUT</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </Fetching>
   )
+})
+
+const styles = StyleSheet.create({
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    bottom: 50,
+    alignSelf: 'center',
+    borderColor: color.palette.lightGrey,
+    borderWidth: 0.5
+  },
+  viewBottom: {
+    backgroundColor: color.background,
+    paddingHorizontal: 20,
+    flex: 1
+  },
+  textProfile: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  textName: {
+    fontSize: 16,
+    fontWeight: "600"
+  },
+  textEmail: {
+    fontSize: 16,
+    fontWeight: "400"
+  },
+  logout: {
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
 })

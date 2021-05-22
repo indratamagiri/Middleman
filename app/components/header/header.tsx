@@ -1,61 +1,88 @@
-import React from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
-import { HeaderProps } from "./header.props"
-import { Button } from "../button/button"
-import { Text } from "../text/text"
-import { Icon } from "../icon/icon"
-import { spacing } from "../../theme"
-import { translate } from "../../i18n/"
+import React from 'react';
+import {
+  StyleSheet, Text, TouchableOpacity, View
+} from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { color } from '../../theme';
 
-// static styles
-const ROOT: ViewStyle = {
-  flexDirection: "row",
-  paddingHorizontal: spacing[4],
-  alignItems: "center",
-  paddingTop: spacing[5],
-  paddingBottom: spacing[5],
-  justifyContent: "flex-start",
+interface Props {
+  navigation?: any,
+  title?: string,
+  containerStyle?: {},
+  titleStyle?: {},
+  backAction?: () => void,
+  children?: React.ReactNode,
+  rightButton?: React.ReactNode,
 }
-const TITLE: TextStyle = { textAlign: "center" }
-const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
-const LEFT: ViewStyle = { width: 32 }
-const RIGHT: ViewStyle = { width: 32 }
 
-/**
- * Header that appears on many screens. Will hold navigation buttons and screen title.
- */
-export function Header (props: HeaderProps) {
+const styles = StyleSheet.create({
+  mainContainer: {
+    flexDirection: 'row',
+    elevation: 4,
+    shadowOpacity: 0.1,
+    shadowOffset: {
+      width: 1, height: 3
+    },
+    zIndex: 99,
+    backgroundColor: color.palette.white,
+    padding: 16,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%'
+  },
+  titleText: {
+    alignSelf: 'center',
+    fontSize: 16
+  }
+});
+
+export const Header = (props: Props) => {
   const {
-    onLeftPress,
-    onRightPress,
-    rightIcon,
-    leftIcon,
-    headerText,
-    headerTx,
-    style,
+    navigation,
+    title,
+    containerStyle,
     titleStyle,
-  } = props
-  const header = headerText || (headerTx && translate(headerTx)) || ""
+    backAction = () => navigation.goBack(),
+    children,
+    rightButton
+  } = props;
 
   return (
-    <View style={{ ...ROOT, ...style }}>
-      {leftIcon ? (
-        <Button preset="link" onPress={onLeftPress}>
-          <Icon icon={leftIcon} />
-        </Button>
-      ) : (
-        <View style={LEFT} />
+    <View
+      style={{
+        ...styles.mainContainer,
+        ...containerStyle
+      }}
+    >
+      {navigation && (
+        <TouchableOpacity
+          style={{
+            marginRight: 20,
+            padding: 4
+          }}
+          onPress={backAction}
+        >
+          <MaterialIcons
+            name="arrow-back"
+            size={22}
+          />
+        </TouchableOpacity>
       )}
-      <View style={TITLE_MIDDLE}>
-        <Text style={{ ...TITLE, ...titleStyle }} text={header} />
+      {children || (
+        <Text
+          style={{
+            ...styles.titleText,
+            width: rightButton ? '70%' : '86%',
+            ...titleStyle
+          }}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
+      )}
+      <View style={{ position: 'absolute', right: 16 }}>
+        {rightButton}
       </View>
-      {rightIcon ? (
-        <Button preset="link" onPress={onRightPress}>
-          <Icon icon={rightIcon} />
-        </Button>
-      ) : (
-        <View style={RIGHT} />
-      )}
     </View>
-  )
-}
+  );
+};
